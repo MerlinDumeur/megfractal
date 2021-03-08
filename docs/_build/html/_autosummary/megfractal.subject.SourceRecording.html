@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>megfractal.subject.SourceRecording &#8212; Megfractal  documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/font-source-code-pro.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/font-source-sans-pro.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="megfractal.subject.Study" href="megfractal.subject.Study.html" />
+    <link rel="prev" title="megfractal.subject.SubjectRecording" href="megfractal.subject.SubjectRecording.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          Megfractal</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../installation.html">Install</a></li>
+                <li><a href="../examples.html">Examples</a></li>
+                <li><a href="../reference.html">API</a></li>
+                <li><a href="../theory.html">Theory</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="megfractal-subject-sourcerecording">
+<h1>megfractal.subject.SourceRecording<a class="headerlink" href="#megfractal-subject-sourcerecording" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="megfractal.subject.SourceRecording">
+<em class="property">class </em><code class="sig-prename descclassname">megfractal.subject.</code><code class="sig-name descname">SourceRecording</code><span class="sig-paren">(</span><em class="sig-param">data: megfractal.DataLoader.DataLoader</em>, <em class="sig-param">subjects_dir: str = None</em>, <em class="sig-param">file_id: megfractal.DataLoader.SrcFileIdentifier = None</em>, <em class="sig-param">morphed: bool = False</em><span class="sig-paren">)</span><a class="headerlink" href="#megfractal.subject.SourceRecording" title="Permalink to this definition">¶</a></dt>
+<dd><p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_hmin</span></code>(self, j1, j2, normalization, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#megfractal.subject.SourceRecording.check_max_scale" title="megfractal.subject.SourceRecording.check_max_scale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_max_scale</span></code></a>(self, wt_name)</p></td>
+<td><p>Returns the maximum scale to which the signals can be decomposed by a given wavelet</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_max_scale_db</span></code>(self[, n_moments])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare_sensor</span></code>(self, other, sensor[, …])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#megfractal.subject.SourceRecording.compare_sensors" title="megfractal.subject.SourceRecording.compare_sensors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare_sensors</span></code></a>(self, other, sensors[, …])</p></td>
+<td><p>Compare the PSD of two signals.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#megfractal.subject.SourceRecording.export" title="megfractal.subject.SourceRecording.export"><code class="xref py py-obj docutils literal notranslate"><span class="pre">export</span></code></a>(self, filename)</p></td>
+<td><p>Pickles the Study instance to a file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_beta_to_H</span></code>(self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_file</span></code>(fname_template, file_id, subjects_dir)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_h5</span></code>(fname_template, file_id, …)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#megfractal.subject.SourceRecording.gen_fractal" title="megfractal.subject.SourceRecording.gen_fractal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gen_fractal</span></code></a>(self[, n_moments, freq_band])</p></td>
+<td><p>Compute fractal values for all the signals in the recording</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#megfractal.subject.SourceRecording.gen_multifractal" title="megfractal.subject.SourceRecording.gen_multifractal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gen_multifractal</span></code></a>(self[, j1, j2, …])</p></td>
+<td><p>Perform for each signal the multifractal analysis with the specified parameters</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_estimates</span></code>(self, var_name)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_parameters</span></code>(self[, mode])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">map_var</span></code>(self, var_name, f)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_surface</span></code>(self, var_name)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="megfractal.subject.SourceRecording.check_max_scale">
+<code class="sig-name descname">check_max_scale</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">wt_name</em><span class="sig-paren">)</span><a class="headerlink" href="#megfractal.subject.SourceRecording.check_max_scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the maximum scale to which the signals can be decomposed by
+a given wavelet</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="megfractal.subject.SourceRecording.compare_sensors">
+<code class="sig-name descname">compare_sensors</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">other</em>, <em class="sig-param">sensors</em>, <em class="sig-param">ncols=3</em>, <em class="sig-param">n_moments=2</em>, <em class="sig-param">n_fft=4096</em>, <em class="sig-param">seg_size=None</em>, <em class="sig-param">log=&lt;ufunc 'log2'&gt;</em>, <em class="sig-param">transform_type='both'</em>, <em class="sig-param">fit_beta=False</em>, <em class="sig-param">freq_band=(0.01</em>, <em class="sig-param">2)</em>, <em class="sig-param">filename=None</em><span class="sig-paren">)</span><a class="headerlink" href="#megfractal.subject.SourceRecording.compare_sensors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare the PSD of two signals. The 1/f can be optionally fit</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="megfractal.subject.SourceRecording.export">
+<code class="sig-name descname">export</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#megfractal.subject.SourceRecording.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickles the Study instance to a file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="megfractal.subject.SourceRecording.gen_fractal">
+<code class="sig-name descname">gen_fractal</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">n_moments=2</em>, <em class="sig-param">freq_band=(0.01</em>, <em class="sig-param">2)</em><span class="sig-paren">)</span><a class="headerlink" href="#megfractal.subject.SourceRecording.gen_fractal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute fractal values for all the signals in the recording</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>n_moments</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Number of moments of the Daubechies wavelet used in the transform</p>
+</dd>
+<dt><strong>freq_band</strong><span class="classifier">(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a>)</span></dt><dd><p>Frequency band over which to fit the linear regression</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="megfractal.subject.SourceRecording.gen_multifractal">
+<code class="sig-name descname">gen_multifractal</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">j1=1</em>, <em class="sig-param">j2=10</em>, <em class="sig-param">normalization=1</em>, <em class="sig-param">gamint=0.0</em>, <em class="sig-param">weighted=True</em>, <em class="sig-param">wt_name='db3'</em>, <em class="sig-param">p_exp=None</em>, <em class="sig-param">q=None</em>, <em class="sig-param">n_cumul=3</em><span class="sig-paren">)</span><a class="headerlink" href="#megfractal.subject.SourceRecording.gen_multifractal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform for each signal the multifractal analysis with the specified
+parameters</p>
+</dd></dl>
+
+</dd></dl>
+
+<div style='clear:both'></div></div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2020, Merlin Dumeur.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.git": true,
+			"**/.gitattributes": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"**/__pycache__": true,
+			"**/.vscode": true,
+			"megfractal/old/":true
+		},
+		"remote.autoForwardPorts": false,
+		"autoDocstring.docstringFormat": "numpy",
+		"[python]": {
+			"editor.rulers": [80]
+		},
+		"python.linting.flake8Enabled": true
+	}
+}
