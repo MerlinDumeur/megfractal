@@ -175,6 +175,16 @@ class FifLoader(DataLoader):
         finally:
             del raw
 
+    def get_sensor(self, sensor):
+
+        raw = mne.io.read_raw_fif(self.filename, verbose=False)
+        raw.crop(*self.cropping, include_tmax=True)
+        raw.pick_channels([sensor])
+        raw.load_data(verbose=False)
+
+        return raw.to_data_frame(picks='meg', index='time', time_format='ms',
+                                 scalings={'grad': 1e0, 'mag': 1e0})
+
     def yield_chunk(self):
 
         raw = mne.io.read_raw_fif(self.filename, verbose=False)

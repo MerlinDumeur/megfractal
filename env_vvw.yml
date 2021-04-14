@@ -1,0 +1,11 @@
+name: multifracs
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python==3.8
+  - pip
+  - pip:
+    - --use-deprecated=legacy-resolver -e git+https://github.com/neurospin/pymultifracs.git@master#egg=pymultifracs
+    - --use-deprecated=legacy-resolver -e git+https://github.com/MerlinDumeur/megfractal.git@master#egg=megfractal
+  - ipykernel

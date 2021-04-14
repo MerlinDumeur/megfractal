@@ -287,7 +287,8 @@ class Recording:
 
     def load_signal(self, sensor):
 
-        signal = [*self.data.get_df()][0][sensor].values
+        signal = self.data.get_sensor(sensor).values
+        # signal = [*self.data.get_df()][0][sensor].values
         sfreq = self.data.sfreq
         param = self.mf_param
 

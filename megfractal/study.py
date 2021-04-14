@@ -1117,15 +1117,17 @@ class Study:
         self.runs[seg1][subject].compare_sensors(self.runs[seg2][subject],
                                                  sensors, **kwargs)
 
-    def load_signals(self, sensor, segs):
+    def load_signals(self, sensor, segs, subjects=None):
+
+        subjects = subjects or self.conditions.index
 
         return {
             subject: {
                 seg: self.conditions.loc[subject, seg].load_signal(sensor)
-                for seg in segs
+                for seg in tqdm(segs)
                 if self.conditions.loc[subject, seg] is not None
             }
-            for subject in self.conditions.index
+            for subject in subjects
         }
 
     # def load_signal(self, seg, subject, sensor):

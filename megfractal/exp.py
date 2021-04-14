@@ -1,22 +1,23 @@
 import pickle
 from collections import defaultdict, namedtuple
-from pymultifracs.mfa import mf_analysis_full
-from pymultifracs.utils import scale2freq
 
 from tqdm.auto import tqdm
+import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy
-import matplotlib
-import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
 
 import mne
-from mne.stats.regression import _fit_lm
 from mne.viz.topomap import _set_contour_locator
+from mne.stats.regression import _fit_lm
+from pymultifracs.utils import scale2freq
+from pymultifracs.mfa import mf_analysis_full
 
-from .utils import escape_none, get_first, emb_df_to_df
-from .viz import plot_topomaps, prepare_headpos
 from .statistics import spatial_cluster_1samp
+from .utils import emb_df_to_df, escape_none, get_first
+from .viz import plot_topomaps, prepare_headpos
 
 
 @escape_none
@@ -134,7 +135,8 @@ def sensor_regression(behav, mf_est, subject, sensor, condition,
         perf: pd.DataFrame([behav[perf].loc[idx],
                             mf_est_sensor.loc[idx]]).transpose().dropna()
         for perf in behav
-        if perf not in ['RT1_sec', 'RT2_sec'] or condition == 'replay'
+        if (perf not in ['RT1_sec', 'RT2_sec', 'RT_sec'])
+        or (all(['r' in c for c in condition]))
     }
 
     if len(df_reg) == 0:
@@ -303,36 +305,48 @@ def plot_study_topo(df_study, info, variable='slope', stat='p_val',
 
 
 def cluster_1samp(param_df, info, reg_param='slope', suffix='',
-                  sensors=['mag', 'grad']):
+                  sensors=['mag', 'grad'], ):
 
     clusters = {}
 
     for (cond, stat, est) in param_df:
+        for perf_metric in (param_df[(cond, stat, est)][reg_param]
+                            .columns.get_level_values(0).unique()):
 
-        cluster_l = []
-        pvalue_l = []
-        t_obs_l = []
+            cluster_l = []
+            pvalue_l = []
+            t_obs_l = []
 
-        for s in sensors:
-            t_obs, cluster, cluster_pv, _ = \
-                spatial_cluster_1samp((param_df[cond][stat][est][reg_param]),
-                                      info, 'mag', plot=False, n_jobs=10,
-                                      show=False)
+            for s in sensors:
+                t_obs, cluster, cluster_pv, _ = \
+                    spatial_cluster_1samp((param_df[(cond, stat, est)]
+                                           [reg_param][perf_metric, 'beta']),
+                                        info, s, plot=False, n_jobs=10,
+                                        show=False)
 
-            cluster_l.append(cluster)
-            pvalue_l.append(cluster_pv)
-            t_obs_l.append(t_obs)
+                cluster_l.append(cluster)
+                pvalue_l.append(cluster_pv)
+                t_obs_l.append(t_obs)
 
-            clusters[(cond, stat, est, s)] = np.logical_or.reduce(cluster)
+                # import ipdb; ipdb.set_trace()
+                print(cluster_pv)
 
-        filename = (f'figures/cluster_{reg_param}_{est}_{stat}_{cond}'
-                    f'{suffix}.pdf')
+                # if perf_metric == ''
+                # if not isinstance(np.logical_or.reduce(cluster), np.ndarray):
+                    # import ipdb; ipdb.set_trace()
 
-        plot_cluster_multiple_topo(
-            param_df[cond][stat][est][reg_param],
-            cluster_l, pvalue_l, info, sensors, ['']*len(sensors),
-            t_obs=t_obs_l, show=False, filename=filename)
-        plt.show()
+                if len(cluster) > 0:
+                    clusters[(cond, stat, est, s, perf_metric)] = \
+                        np.logical_or.reduce(cluster)
+
+            filename = (f'figures/regression/cluster_{reg_param}_{est}_{stat}_'
+                        f'{cond}_{perf_metric}{suffix}.pdf')
+
+            plot_cluster_multiple_topo(
+                param_df[(cond, stat, est)][reg_param][perf_metric, 'beta'],
+                cluster_l, pvalue_l, info, sensors, ['']*len(sensors),
+                t_obs=t_obs_l, show=False, filename=filename)
+            # plt.show()
 
     # for cond in param_df:
     #     clusters[cond] = {}
@@ -533,8 +547,28 @@ def behaviour_from_csv(fname, stat_list):
 
 def load_behav_est(fname, perfs, study, seg, vars, drop_slice):
 
-    behav_stat = get_behaviour_stat(behaviour_from_csv(fname, perfs),
-                                    ['med'])
+    df = behaviour_from_csv(fname, perfs)
+
+    if 'RT1_sec' in perfs and 'RT2_sec' in perfs:
+        
+        l = []
+
+        for x, y in zip(df.RT1_sec, df.RT2_sec):
+            if x is None:
+                x = []
+            else:
+                x = x.values
+            if y is None:
+                y = []
+            else:
+                y = y.values
+
+            l.append(np.concatenate([x, y]))
+
+        df['RT_sec'] = pd.Series(l, df.index)
+        # df.drop(['RT1_sec', 'RT2_sec'], axis=1, inplace=True)
+
+    behav_stat = get_behaviour_stat(df, ['med'])
 
     mf_est = {var: study.extract_df(var, seg=seg).stack([0, 1])
               for var in vars}
@@ -585,9 +619,98 @@ def compute_mfa(signal, sfreq, param):
 
     freq = scale2freq(np.array(cumul.j).astype(np.float), sfreq)
 
-    C2 = 2 ** cumul.values[1, :]
+    C2 = 2 ** cumul.values[1, :, 0]
 
     slope = (np.log2(freq[support]),
              (cumul.j[support] * cumul.slope[1] + cumul.intercept[1]))
 
     return result(freq, C2, slope)
+
+
+def est_by_cluster(mf_est, clusters):
+
+    est_clusters = {}
+
+    for (cond, behav_stat, est, ch_type, perf) in clusters:
+
+        islice = {
+            'mag': pd.IndexSlice[:102],
+            'grad': pd.IndexSlice[102:]
+        }[ch_type]
+
+        cluster = clusters[(cond, behav_stat, est, ch_type, perf)]
+
+        def mean_cluster(x, cluster, islice):
+            return x.iloc[islice].loc[cluster].mean()
+
+        est_cluster = mf_est[est].map(lambda x: mean_cluster(x, cluster, islice))
+        est_cluster.name = f'{behav_stat} {est} {ch_type} cluster'
+        est_clusters[(cond, est, behav_stat, ch_type, perf)] = est_cluster
+
+    return est_clusters
+
+
+def get_est(df_clusters, est, perf, behaviour, behaviour_stat):
+
+    if 'RT' in perf:
+        df_clusters = df_clusters.loc[pd.IndexSlice[:, ['r1', 'r2', 'r3'], :], :]
+
+    est_series = df_clusters.loc[:, pd.IndexSlice[est, behaviour, :, perf]]
+
+    if est_series.values.shape[-1] == 0:
+        return None, {}, None
+
+    est_series = est_series[(est, behaviour)].stack(0)
+    est_series.name = est
+
+    df_est = pd.DataFrame(
+        np.array(
+            [est_series.values[:, 0],
+             behaviour_stat[behaviour].loc[est_series.index, perf].values]
+        ).transpose(),
+        index=est_series.index, columns=[est, behaviour])
+
+    df_est = df_est.reset_index()
+
+    df_est['time_length'] = df_est['condition'].apply(lambda x: x[-1])
+    df_est['condition'] = df_est['condition'].apply(
+        lambda x: {'p1': 'play', 'p2': 'play', 'p3': 'play',
+                   'r1': 'replay', 'r2': 'replay', 'r3': 'replay'}[x])
+
+    p_corr = {}
+    p_corr_sub = {'rho': {}, 'p-value': {}, 'a': {}, 'b': {}}
+
+    for cond in ['play', 'replay']:
+        p_corr[cond] = {}
+
+        for ch_type in ['mag', 'grad']:
+
+            temp = df_est[(df_est['ch_type'] == ch_type)
+                          & (df_est['condition'] == cond)][[est, behaviour]]
+            if len(temp[est]) > 2:
+                p_corr[cond][ch_type] = scipy.stats.pearsonr(temp[est],
+                                                             temp[behaviour])
+
+            try:
+                df_est_temp = (df_est.set_index(['subject', 'condition',
+                                                 'ch_type'])
+                               .loc[pd.IndexSlice[:, cond, ch_type]])
+            except KeyError:
+                continue
+
+            for subject in df_est_temp.index.get_level_values(0).unique():
+
+                df_est_subj = df_est_temp.loc[subject]
+
+                corr_subj = scipy.stats.pearsonr(df_est_subj[est],
+                                                 df_est_subj[behaviour])
+
+                for i, val in enumerate(['rho', 'p-value']):
+                    p_corr_sub[val][(subject, ch_type, cond)] = corr_subj[i]
+
+                LR = LinearRegression().fit(
+                    df_est_subj[behaviour].values[:, None], df_est_subj[est])
+                p_corr_sub['a'][(subject, ch_type, cond)] = LR.coef_[0]
+                p_corr_sub['b'][(subject, ch_type, cond)] = LR.intercept_
+
+    return df_est, p_corr, p_corr_sub
